@@ -172,7 +172,7 @@ def extract_events(root):
     events = []
     for element in assertget(root, "events"):
         qualifiers = {}
-        qualifiers = {int(q["type"]["value"]): q["value"] if 'value' in q else None
+        qualifiers = {int(q["type"]["value"]): q["value"] if 'value' in q else q['type']['displayName']
                       for q in element.get("qualifiers", [])}
         start_x = float(assertget(element, "x")) if "x" in list(element.keys()) else 0.0
         start_y = float(assertget(element, "y")) if "y" in list(element.keys()) else 0.0
@@ -401,7 +401,7 @@ def convert_to_actions(events, home_team_id):
         .reset_index(drop=True)
     )
     actions = fix_owngoal_coordinates(actions)
-    actions = fix_direction_of_play(actions, home_team_id)
+#     actions = fix_direction_of_play(actions, home_team_id)
     actions = fix_clearances(actions)
     actions["action_id"] = range(len(actions))
     actions = add_dribbles(actions)
@@ -419,6 +419,7 @@ def convert_to_actions(events, home_team_id):
             "result_id",
             "bodypart_id",
             "type_id",
+            "qualifiers"
         ]
     ]
 
